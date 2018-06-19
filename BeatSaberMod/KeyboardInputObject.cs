@@ -84,6 +84,9 @@ namespace BeatSaberMod
             }
         }
 
+        GameObject sideMenuParentObject;
+        ControllerButtonSelectorController cntrlBtnSel;
+        KeyboardButtonSelectorController keybBtnSel;
         void SetupTweakSettings()
         {
             var origianlSettingsObject = Resources.FindObjectsOfTypeAll<SettingsViewController>().FirstOrDefault();
@@ -107,8 +110,8 @@ namespace BeatSaberMod
             CleanScreen(right);
 
             SetTitle(settingsView, "Input Bindings");
-            SetTitle(left, "Input Bindings");
-            SetTitle(right, "Input Bindings");
+            SetTitle(left, "");
+            SetTitle(right, "Edit Binding");
 
             Transform mainContainer = settingsObject.transform.Find("SettingsContainer");
             Transform leftContainer = left.transform.Find("SettingsContainer");
@@ -117,8 +120,51 @@ namespace BeatSaberMod
             SetRectYPos(leftContainer.GetComponent<RectTransform>(), 12);
             SetRectYPos(rightContainer.GetComponent<RectTransform>(), 12);
 
+            CopySwitchSettingsController<EnableToggleSettingsController>("Enabled", mainContainer);
             CopyListSettingsController<InputMethodSettingsController>("Input Mode", mainContainer);
             CopyListSettingsController<BindingEditorSelectorSettingsController>("Edit Binding", mainContainer);
+
+            sideMenuParentObject = Instantiate(new GameObject("Dummy Positioner"), rightContainer);
+            sideMenuParentObject.SetActive(true);
+            Transform menuParent = sideMenuParentObject.transform;
+
+            cntrlBtnSel = CopyListSettingsController<ControllerButtonSelectorController>("Map", menuParent, false);
+            keybBtnSel = CopyListSettingsController<KeyboardButtonSelectorController>("to", menuParent, false);
+
+            SetSelectedBinding(-1);
+        }
+
+        int curSelectedBinding = -1;
+        public void SetSelectedBinding(int index)
+        {
+            if (index != curSelectedBinding)
+            {
+                cntrlBtnSel.ApplySettings();
+                keybBtnSel.ApplySettings();
+            }
+
+            if (index == -1)
+            {
+                if (sideMenuParentObject.activeSelf)
+                    sideMenuParentObject.transform.Translate(new Vector3(0, -10000, 0));
+                sideMenuParentObject.SetActive(false);
+            }
+            else
+            {
+                if (!sideMenuParentObject.activeSelf)
+                    sideMenuParentObject.transform.Translate(new Vector3(0, 10000, 0));
+                sideMenuParentObject.SetActive(true);
+
+                if (index != curSelectedBinding)
+                {
+                    cntrlBtnSel.SelectedIndex = index;
+                    cntrlBtnSel.Init();
+                    keybBtnSel.SelectedIndex = index;
+                    keybBtnSel.Init();
+                }
+            }
+
+            curSelectedBinding = index;
         }
 
         void SetRectYPos(RectTransform rect, float y)
@@ -155,7 +201,7 @@ namespace BeatSaberMod
             return originalSettings;
         }
 
-        void CopyListSettingsController<T>(string name, Transform container) where T : ListSettingsController
+        T CopyListSettingsController<T>(string name, Transform container, bool autoApply = true) where T : ListSettingsController
         {
             var volumeSettings = Resources.FindObjectsOfTypeAll<VolumeSettingsController>().FirstOrDefault();
             volumeSettings.gameObject.SetActive(false);
@@ -171,10 +217,12 @@ namespace BeatSaberMod
             DestroyImmediate(volume);
 
             SettingsObject.GetComponentInChildren<TMP_Text>().text = name;
-            settingsView.settingControllers.Add(newListSettingsController);
+            if (autoApply) settingsView.settingControllers.Add(newListSettingsController);
+
+            return newListSettingsController;
         }
 
-        void CopySwitchSettingsController<T>(string name, Transform container) where T : SwitchSettingsController
+        T CopySwitchSettingsController<T>(string name, Transform container, bool autoApply = true) where T : SwitchSettingsController
         {
             var volumeSettings = Resources.FindObjectsOfTypeAll<WindowModeSettingsController>().FirstOrDefault();
             volumeSettings.gameObject.SetActive(false);
@@ -190,7 +238,9 @@ namespace BeatSaberMod
             DestroyImmediate(volume);
 
             SettingsObject.GetComponentInChildren<TMP_Text>().text = name;
-            settingsView.settingControllers.Add(newSwitchSettingsController);
+            if (autoApply) settingsView.settingControllers.Add(newSwitchSettingsController);
+
+            return newSwitchSettingsController;
         }
 
         private void CreateKeyboardSettingsButton()
@@ -205,11 +255,12 @@ namespace BeatSaberMod
             (btn.transform as RectTransform).sizeDelta = new Vector2(28f, 10f);
 
             btn.GetComponentInChildren<TextMeshProUGUI>().text = "Keybinds";
-            btn.onClick.AddListener(ShowTweakSettings);
+            btn.onClick.AddListener(ShowSettings);
         }
 
-        public void ShowTweakSettings()
+        public void ShowSettings()
         {
+            Console.WriteLine("Showing Settings");
             _mainMenuViewController.PresentModalViewController(settingsView, null, false);
         }
     }

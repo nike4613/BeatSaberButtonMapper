@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BeatSaberMod.Misc;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -30,7 +31,7 @@ namespace BeatSaberMod
 
         public override string ToString()
         {
-            return $"{SourceKey} ▻ {DestKey}";
+            return $"{SourceKey.ToNiceName()} => {DestKey.ToNiceName()}";
         }
     }
 
@@ -65,9 +66,6 @@ namespace BeatSaberMod
             string filePath = SettingsPath();
             if (File.Exists(filePath))
             {
-                //string dataAsJson = File.ReadAllText(filePath);
-                //instance = JsonUtility.FromJson<Settings>(dataAsJson);
-
                 var fstream = File.OpenRead(SettingsPath());
                 XmlSerializer serializer = new XmlSerializer(typeof(Settings));
                 instance = (Settings)serializer.Deserialize(fstream);
@@ -81,14 +79,10 @@ namespace BeatSaberMod
 
         public static void Save()
         {
-            //string dataAsJson = JsonUtility.ToJson(instance, true);
-
             var fstream = File.OpenWrite(SettingsPath());
             XmlSerializer serializer = new XmlSerializer(typeof(Settings));
             serializer.Serialize(fstream, instance);
             fstream.Close();
-
-            //File.WriteAllText(SettingsPath(), dataAsJson);
         }
     }
 }

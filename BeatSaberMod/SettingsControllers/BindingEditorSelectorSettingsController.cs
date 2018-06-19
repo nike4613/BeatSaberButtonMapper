@@ -25,6 +25,8 @@ namespace BeatSaberMod.SettingsControllers
                 return "None";
             }
 
+            KeyboardInputObject.Instance.SetSelectedBinding(idx - 1);
+
             return Settings.Bindings[idx - 1].ToString();
         }
     }

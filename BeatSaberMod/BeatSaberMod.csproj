@@ -77,10 +77,14 @@
     <Compile Include="ConfigViewController.cs" />
     <Compile Include="ControllerInput.cs" />
     <Compile Include="KeyboardInputPlugin.cs" />
+    <Compile Include="Misc\EnumExtensions.cs" />
+    <Compile Include="Misc\Utilites.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReflectionUtil.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="SettingsControllers\BindingEditorSelectorSettingsController.cs" />
+    <Compile Include="SettingsControllers\ButtonSelectorControllers.cs" />
+    <Compile Include="SettingsControllers\EnableToggleSettingsController.cs" />
     <Compile Include="SettingsControllers\InputMethodSettingsController.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
