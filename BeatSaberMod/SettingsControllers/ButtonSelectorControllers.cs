@@ -32,18 +32,27 @@ namespace BeatSaberMod.SettingsControllers
                     break;
             }
 
-            values = Enum.GetValues(enumType).OfType<KeyCode>().ToArray();
+            //Console.WriteLine("Found type");
+
+            values = Enum.GetValues(enumType).Cast<KeyCode>().ToArray();
+
+            //Console.WriteLine("Got values");
         }
 
         private string GetName(KeyCode val)
         {
+            Console.WriteLine(Settings.ControllerMode);
+
             switch (Settings.ControllerMode)
             {
                 case ControllerMode.Oculus:
+                    Console.WriteLine((ControllerInput.Oculus)val);
                     return ((ControllerInput.Oculus)val).ToNiceName();
                 case ControllerMode.Vive:
+                    Console.WriteLine((ControllerInput.Vive)val);
                     return ((ControllerInput.Vive)val).ToNiceName();
                 case ControllerMode.WinMR:
+                    Console.WriteLine((ControllerInput.WinMR)val);
                     return ((ControllerInput.WinMR)val).ToNiceName();
             }
             return "";
@@ -53,17 +62,24 @@ namespace BeatSaberMod.SettingsControllers
 
         protected override void ApplyValue(int idx)
         {
-            Settings.Bindings[SelectedIndex].SourceKey = values[idx];
+            if (SelectedIndex != -1)
+                Settings.Bindings[SelectedIndex].SourceKey = values[idx];
         }
 
         protected override void GetInitValues(out int idx, out int numberOfElements)
         {
+            //Console.WriteLine("Setting up");
+
             Setup();
+
+            //Console.WriteLine($"Attempting to find {(SelectedIndex != -1 ? Settings.Bindings[SelectedIndex].SourceKey : KeyCode.Alpha0)} in values");
 
             numberOfElements = values.Length;
             if (SelectedIndex != -1)
             {
                 idx = Array.IndexOf(values, Settings.Bindings[SelectedIndex].SourceKey);
+                //Console.WriteLine($"Index is {idx}");
+                if (idx == -1) idx = 0;
             }
             else
             {
@@ -73,6 +89,8 @@ namespace BeatSaberMod.SettingsControllers
 
         protected override string TextForValue(int idx)
         {
+            //Console.WriteLine($"Getting {idx} from {values}");
+            //Console.WriteLine($"Getting name for {values[idx]}");
             return GetName(values[idx]);
         }
     }
@@ -83,14 +101,15 @@ namespace BeatSaberMod.SettingsControllers
 
         private void Setup()
         {
-            values = Enum.GetValues(typeof(KeyCode)).OfType<KeyCode>().ToArray();
+            values = Enum.GetValues(typeof(KeyCode)).Cast<KeyCode>().ToArray();
         }
 
         KeyCode[] values;
 
         protected override void ApplyValue(int idx)
         {
-            Settings.Bindings[SelectedIndex].DestKey = values[idx];
+            if (SelectedIndex != -1)
+                Settings.Bindings[SelectedIndex].DestKey = values[idx];
         }
 
         protected override void GetInitValues(out int idx, out int numberOfElements)
@@ -101,6 +120,7 @@ namespace BeatSaberMod.SettingsControllers
             if (SelectedIndex != -1)
             {
                 idx = Array.IndexOf(values, Settings.Bindings[SelectedIndex].DestKey);
+                if (idx == -1) idx = 0;
             }
             else
             {

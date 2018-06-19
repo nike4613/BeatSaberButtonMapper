@@ -25,6 +25,7 @@ namespace BeatSaberMod.SettingsControllers
                 return "None";
             }
 
+            Console.WriteLine($"Selecting binding index {idx - 1}");
             KeyboardInputObject.Instance.SetSelectedBinding(idx - 1);
 
             return Settings.Bindings[idx - 1].ToString();

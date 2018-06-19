@@ -68,10 +68,15 @@ namespace BeatSaberMod
             {
                 var fstream = File.OpenRead(SettingsPath());
                 XmlSerializer serializer = new XmlSerializer(typeof(Settings));
-                instance = (Settings)serializer.Deserialize(fstream);
+                try
+                {
+                    instance = (Settings)serializer.Deserialize(fstream);
+                }
+                catch (Exception ) { }
                 fstream.Close();
             }
-            else
+
+            if (instance == null)
             {
                 instance = new Settings();
             }

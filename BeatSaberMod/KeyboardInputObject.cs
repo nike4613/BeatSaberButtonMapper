@@ -85,6 +85,7 @@ namespace BeatSaberMod
         }
 
         GameObject sideMenuParentObject;
+        bool objectEnabled = false;
         ControllerButtonSelectorController cntrlBtnSel;
         KeyboardButtonSelectorController keybBtnSel;
         void SetupTweakSettings()
@@ -126,6 +127,7 @@ namespace BeatSaberMod
 
             sideMenuParentObject = Instantiate(new GameObject("Dummy Positioner"), rightContainer);
             sideMenuParentObject.SetActive(true);
+            objectEnabled = true;
             Transform menuParent = sideMenuParentObject.transform;
 
             cntrlBtnSel = CopyListSettingsController<ControllerButtonSelectorController>("Map", menuParent, false);
@@ -137,30 +139,44 @@ namespace BeatSaberMod
         int curSelectedBinding = -1;
         public void SetSelectedBinding(int index)
         {
-            if (index != curSelectedBinding)
+            Console.WriteLine($"Selecting binding {index}");
+
+            if (index != curSelectedBinding && curSelectedBinding != -1)
             {
                 cntrlBtnSel.ApplySettings();
                 keybBtnSel.ApplySettings();
             }
 
+            Console.WriteLine("Applied old settings");
+
             if (index == -1)
             {
-                if (sideMenuParentObject.activeSelf)
+                if (objectEnabled)
                     sideMenuParentObject.transform.Translate(new Vector3(0, -10000, 0));
-                sideMenuParentObject.SetActive(false);
+                objectEnabled = false;
+
+                Console.WriteLine("Disabled parent");
             }
             else
             {
-                if (!sideMenuParentObject.activeSelf)
+                if (!objectEnabled)
                     sideMenuParentObject.transform.Translate(new Vector3(0, 10000, 0));
-                sideMenuParentObject.SetActive(true);
+                objectEnabled = true;
+
+                Console.WriteLine("Enabled parent");
+                Console.WriteLine($"{index} != {curSelectedBinding} : {index != curSelectedBinding}");
+
+                //Console.WriteLine((cntrlBtnSel as object).ToString());
+                //Console.WriteLine((keybBtnSel as object).ToString());
 
                 if (index != curSelectedBinding)
                 {
                     cntrlBtnSel.SelectedIndex = index;
                     cntrlBtnSel.Init();
+                    Console.WriteLine("Inited cntrlBtnSel");
                     keybBtnSel.SelectedIndex = index;
                     keybBtnSel.Init();
+                    Console.WriteLine("Inited keybBtnSel");
                 }
             }
 

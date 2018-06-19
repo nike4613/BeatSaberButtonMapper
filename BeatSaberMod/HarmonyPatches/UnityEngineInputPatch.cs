@@ -37,12 +37,19 @@ namespace BeatSaberMod.HarmonyPatches
             public static void GetKeyAllPost(ref bool __result, MethodBase __originalMethod, KeyCode key)
             { 
                 if (__result || !Settings.Enabled) return;
-                foreach (var binding in Settings.Bindings)
+                try
                 {
-                    if (binding.DestKey == key)
+                    foreach (var binding in Settings.Bindings)
                     {
-                        __result = __result || (bool)__originalMethod.Invoke(null, new object[] { binding.SourceKey });
+                        if (binding.DestKey == key)
+                        {
+                            __result = __result || (bool)__originalMethod.Invoke(null, new object[] { binding.SourceKey });
+                        }
                     }
+                }
+                catch (NullReferenceException)
+                {
+                    // do nothing
                 }
             }
         }
