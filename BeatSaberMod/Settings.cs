@@ -84,7 +84,7 @@ namespace BeatSaberMod
 
         public static void Save()
         {
-            var fstream = File.OpenWrite(SettingsPath());
+            var fstream = File.Open(SettingsPath(), FileMode.Create, FileAccess.Write);
             XmlSerializer serializer = new XmlSerializer(typeof(Settings));
             serializer.Serialize(fstream, instance);
             fstream.Close();

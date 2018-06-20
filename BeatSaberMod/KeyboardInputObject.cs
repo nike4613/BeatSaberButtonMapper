@@ -84,8 +84,6 @@ namespace BeatSaberMod
             }
         }
 
-        GameObject sideMenuParentObject;
-        bool objectEnabled = false;
         ControllerButtonSelectorController cntrlBtnSel;
         KeyboardButtonSelectorController keybBtnSel;
         void SetupTweakSettings()
@@ -125,43 +123,53 @@ namespace BeatSaberMod
             CopyListSettingsController<InputMethodSettingsController>("Input Mode", mainContainer);
             CopyListSettingsController<BindingEditorSelectorSettingsController>("Edit Binding", mainContainer);
 
-            sideMenuParentObject = Instantiate(new GameObject("Dummy Positioner"), rightContainer);
-            sideMenuParentObject.SetActive(true);
-            objectEnabled = true;
-            Transform menuParent = sideMenuParentObject.transform;
+            Transform menuParent = rightContainer;//sideMenuParentObject.transform;
 
             cntrlBtnSel = CopyListSettingsController<ControllerButtonSelectorController>("Map", menuParent, false);
+            CopyListSettingsController<EmptyListSettingsController>("", menuParent); // spacer
+            CopyListSettingsController<EmptyListSettingsController>("", menuParent); // spacer
             keybBtnSel = CopyListSettingsController<KeyboardButtonSelectorController>("to", menuParent, false);
 
             SetSelectedBinding(-1);
         }
 
         int curSelectedBinding = -1;
-        public void SetSelectedBinding(int index)
+        public void ApplyBindingSettings()
         {
-            Console.WriteLine($"Selecting binding {index}");
-
-            if (index != curSelectedBinding && curSelectedBinding != -1)
+            if (curSelectedBinding != -1)
             {
                 cntrlBtnSel.ApplySettings();
                 keybBtnSel.ApplySettings();
             }
+        }
+        public void SetSelectedBinding(int index)
+        {
+            Console.WriteLine($"Selecting binding {index}");
+
+            if (index != curSelectedBinding)
+                ApplyBindingSettings();
 
             Console.WriteLine("Applied old settings");
 
             if (index == -1)
             {
-                if (objectEnabled)
-                    sideMenuParentObject.transform.Translate(new Vector3(0, -10000, 0));
-                objectEnabled = false;
+                cntrlBtnSel.gameObject.SetActive(false);
+                var rendr = cntrlBtnSel.gameObject.GetComponent<Renderer>();
+                if (rendr != null) rendr.enabled = false;
+                keybBtnSel.gameObject.SetActive(false);
+                rendr = keybBtnSel.gameObject.GetComponent<Renderer>();
+                if (rendr != null) rendr.enabled = false;
 
                 Console.WriteLine("Disabled parent");
             }
             else
             {
-                if (!objectEnabled)
-                    sideMenuParentObject.transform.Translate(new Vector3(0, 10000, 0));
-                objectEnabled = true;
+                cntrlBtnSel.gameObject.SetActive(true);
+                var rendr = cntrlBtnSel.gameObject.GetComponent<MeshRenderer>();
+                if (rendr != null) rendr.enabled = true;
+                keybBtnSel.gameObject.SetActive(true);
+                rendr = keybBtnSel.gameObject.GetComponent<MeshRenderer>();
+                if (rendr != null) rendr.enabled = true;
 
                 Console.WriteLine("Enabled parent");
                 Console.WriteLine($"{index} != {curSelectedBinding} : {index != curSelectedBinding}");
@@ -277,6 +285,7 @@ namespace BeatSaberMod
         public void ShowSettings()
         {
             Console.WriteLine("Showing Settings");
+            settingsView.Init();
             _mainMenuViewController.PresentModalViewController(settingsView, null, false);
         }
     }

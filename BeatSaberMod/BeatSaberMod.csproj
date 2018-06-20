@@ -84,6 +84,7 @@
     <Compile Include="Settings.cs" />
     <Compile Include="SettingsControllers\BindingEditorSelectorSettingsController.cs" />
     <Compile Include="SettingsControllers\ButtonSelectorControllers.cs" />
+    <Compile Include="SettingsControllers\EmptyListSettingsController.cs" />
     <Compile Include="SettingsControllers\EnableToggleSettingsController.cs" />
     <Compile Include="SettingsControllers\InputMethodSettingsController.cs" />
   </ItemGroup>
