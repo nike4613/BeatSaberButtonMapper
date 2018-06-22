@@ -87,6 +87,30 @@
     <Compile Include="SettingsControllers\EmptyListSettingsController.cs" />
     <Compile Include="SettingsControllers\EnableToggleSettingsController.cs" />
     <Compile Include="SettingsControllers\InputMethodSettingsController.cs" />
+    <Compile Include="SettingsControllers\PressModeSettingsController.cs" />
+    <Compile Include="WindowsInputSim\IInputDeviceStateAdaptor.cs" />
+    <Compile Include="WindowsInputSim\IInputMessageDispatcher.cs" />
+    <Compile Include="WindowsInputSim\IInputSimulator.cs" />
+    <Compile Include="WindowsInputSim\IKeyboardSimulator.cs" />
+    <Compile Include="WindowsInputSim\IMouseSimulator.cs" />
+    <Compile Include="WindowsInputSim\InputBuilder.cs" />
+    <Compile Include="WindowsInputSim\InputSimulator.cs" />
+    <Compile Include="WindowsInputSim\KeyboardSimulator.cs" />
+    <Compile Include="WindowsInputSim\MouseButton.cs" />
+    <Compile Include="WindowsInputSim\MouseSimulator.cs" />
+    <Compile Include="WindowsInputSim\Native\HARDWAREINPUT.cs" />
+    <Compile Include="WindowsInputSim\Native\INPUT.cs" />
+    <Compile Include="WindowsInputSim\Native\InputType.cs" />
+    <Compile Include="WindowsInputSim\Native\KEYBDINPUT.cs" />
+    <Compile Include="WindowsInputSim\Native\KeyboardFlag.cs" />
+    <Compile Include="WindowsInputSim\Native\MouseFlag.cs" />
+    <Compile Include="WindowsInputSim\Native\MOUSEINPUT.cs" />
+    <Compile Include="WindowsInputSim\Native\MOUSEKEYBDHARDWAREINPUT.cs" />
+    <Compile Include="WindowsInputSim\Native\NativeMethods.cs" />
+    <Compile Include="WindowsInputSim\Native\VirtualKeyCode.cs" />
+    <Compile Include="WindowsInputSim\Native\XButton.cs" />
+    <Compile Include="WindowsInputSim\WindowsInputDeviceStateAdaptor.cs" />
+    <Compile Include="WindowsInputSim\WindowsInputMessageDispatcher.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

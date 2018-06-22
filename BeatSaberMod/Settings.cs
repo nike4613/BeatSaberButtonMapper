@@ -18,6 +18,14 @@ namespace BeatSaberMod
     }
 
     [Serializable]
+    public enum InputMode
+    {
+        Default = 1, // Patch Unity's Input class
+        System = 2, // Send keypresses to the OS
+        Both = Default | System // Send presses to both (could cause problems)
+    }
+
+    [Serializable]
     public class KeyBinding
     {
         /// <summary>
@@ -46,7 +54,10 @@ namespace BeatSaberMod
         // Controller Type
         public ControllerMode controllerMode = default(ControllerMode);
         public static ControllerMode ControllerMode { get => instance.controllerMode; set => instance.controllerMode = value; }
-        
+
+        public InputMode inputMode = InputMode.Default;
+        public static InputMode InputMode { get => instance.inputMode; set => instance.inputMode = value; }
+
         public List<KeyBinding> bindings = new List<KeyBinding>();
         public static List<KeyBinding> Bindings { get => instance.bindings; }
 

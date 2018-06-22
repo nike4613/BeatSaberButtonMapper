@@ -40,14 +40,14 @@ namespace BeatSaberMod
 
             Settings.Load();
 
-            if (Settings.Bindings.Count == 0)
+            /*if (Settings.Bindings.Count == 0)
             {
                 Settings.Bindings.Add(new KeyBinding()
                 {
                     SourceKey = (KeyCode)ControllerInput.Vive.RightTrackpadPress,
                     DestKey = KeyCode.P
                 });
-            }
+            }*/
 
             foreach (var binding in Settings.Bindings)
                 Console.WriteLine(binding);

@@ -33,7 +33,13 @@ namespace BeatSaberMod
 
         void SetupButtons()
         {
-            DestroyImmediate(transform.Find("OkButton").gameObject);
+            //DestroyImmediate(transform.Find("OkButton").gameObject);
+            Button deleteButton = transform.Find("OkButton").GetComponent<Button>();
+            DestroyImmediate(deleteButton.GetComponent<GameEventOnUIButtonClick>());
+            deleteButton.onClick = new Button.ButtonClickedEvent();
+            deleteButton.onClick.AddListener(DeleteKeybind);
+            deleteButton.GetComponentInChildren<TextMeshProUGUI>().text = "Delete Binding";
+
             Button addButton = transform.Find("ApplyButton").GetComponent<Button>();
             DestroyImmediate(addButton.GetComponent<GameEventOnUIButtonClick>());
             addButton.onClick = new Button.ButtonClickedEvent();
@@ -47,14 +53,22 @@ namespace BeatSaberMod
             cancelButton.GetComponentInChildren<TextMeshProUGUI>().text = "Close";
         }
 
+        public virtual void DeleteKeybind()
+        {
+            Settings.Bindings.RemoveAt(KeyboardInputObject.Instance.GetSelectedBinding());
+            Init(true);
+        }
+
         public virtual void AddKeybind()
         {
             Settings.Bindings.Add(new KeyBinding());
             Init();
         }
 
-        public virtual void Init()
+        public virtual void Init(bool noapply = false)
         {
+            KeyboardInputObject.Instance.SetSelectedBinding(-1, noapply);
+
             foreach (SimpleSettingsController simpleSettingsController in settingControllers)
             {
                 simpleSettingsController.gameObject.SetActive(true);

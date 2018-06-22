@@ -36,7 +36,8 @@ namespace BeatSaberMod.HarmonyPatches
 
             public static void GetKeyAllPost(ref bool __result, MethodBase __originalMethod, KeyCode key)
             { 
-                if (__result || !Settings.Enabled) return;
+                // it would return true anyway, the plugin isn't enabled, or the input mode doesn't include default
+                if (__result || !Settings.Enabled || (Settings.InputMode & InputMode.Default) == 0) return;
                 try
                 {
                     foreach (var binding in Settings.Bindings)

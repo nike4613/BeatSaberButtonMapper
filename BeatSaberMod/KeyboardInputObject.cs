@@ -10,6 +10,8 @@ using TMPro;
 using UnityEngine.UI;
 using System.Collections;
 using BeatSaberMod.SettingsControllers;
+using WindowsInput;
+using WindowsInput.Native;
 
 namespace BeatSaberMod
 {
@@ -50,10 +52,161 @@ namespace BeatSaberMod
             }
         }
 
+        Dictionary<KeyCode, VirtualKeyCode> codeConverter = new Dictionary<KeyCode, VirtualKeyCode>() {
+            { KeyCode.A, VirtualKeyCode.VK_A },
+            { KeyCode.Alpha0, VirtualKeyCode.VK_0 },
+            { KeyCode.Alpha1, VirtualKeyCode.VK_1 },
+            { KeyCode.Alpha2, VirtualKeyCode.VK_2 },
+            { KeyCode.Alpha3, VirtualKeyCode.VK_3 },
+            { KeyCode.Alpha4, VirtualKeyCode.VK_4 },
+            { KeyCode.Alpha5, VirtualKeyCode.VK_5 },
+            { KeyCode.Alpha6, VirtualKeyCode.VK_6 },
+            { KeyCode.Alpha7, VirtualKeyCode.VK_7 },
+            { KeyCode.Alpha8, VirtualKeyCode.VK_8 },
+            { KeyCode.Alpha9, VirtualKeyCode.VK_9 },
+            { KeyCode.AltGr, VirtualKeyCode.MENU },
+            //{ KeyCode.Ampersand, VirtualKeyCode. },
+            //{ KeyCode.Asterisk, VirtualKeyCode. },
+            //{ KeyCode.At, VirtualKeyCode. },
+            { KeyCode.B, VirtualKeyCode.VK_B },
+            { KeyCode.BackQuote, VirtualKeyCode.OEM_3 },
+            { KeyCode.Backslash, VirtualKeyCode.OEM_102 },
+            { KeyCode.Backspace, VirtualKeyCode.BACK },
+            { KeyCode.Break, VirtualKeyCode.PAUSE },
+            { KeyCode.C, VirtualKeyCode.VK_C },
+            { KeyCode.CapsLock, VirtualKeyCode.CAPITAL },
+            //{ KeyCode.Caret, VirtualKeyCode. },
+            { KeyCode.Clear, VirtualKeyCode.CLEAR },
+            { KeyCode.Colon, VirtualKeyCode.OEM_1 },
+            { KeyCode.Comma, VirtualKeyCode.OEM_COMMA },
+            { KeyCode.D, VirtualKeyCode.VK_D },
+            { KeyCode.Delete, VirtualKeyCode.DELETE },
+            //{ KeyCode.Dollar, VirtualKeyCode. },
+            { KeyCode.DoubleQuote, VirtualKeyCode.OEM_7 },
+            { KeyCode.DownArrow, VirtualKeyCode.DOWN },
+            { KeyCode.E, VirtualKeyCode.VK_E },
+            { KeyCode.End, VirtualKeyCode.END },
+            //{ KeyCode.Equals, VirtualKeyCode. },
+            { KeyCode.Escape, VirtualKeyCode.ESCAPE },
+            //{ KeyCode.Exclaim, VirtualKeyCode. },
+            { KeyCode.F, VirtualKeyCode.VK_F },
+            { KeyCode.F1, VirtualKeyCode.F1 },
+            { KeyCode.F2, VirtualKeyCode.F2 },
+            { KeyCode.F3, VirtualKeyCode.F3 },
+            { KeyCode.F4, VirtualKeyCode.F4 },
+            { KeyCode.F5, VirtualKeyCode.F5 },
+            { KeyCode.F6, VirtualKeyCode.F6 },
+            { KeyCode.F7, VirtualKeyCode.F7 },
+            { KeyCode.F8, VirtualKeyCode.F8 },
+            { KeyCode.F9, VirtualKeyCode.F9 },
+            { KeyCode.F10, VirtualKeyCode.F10 },
+            { KeyCode.F11, VirtualKeyCode.F11 },
+            { KeyCode.F12, VirtualKeyCode.F12 },
+            { KeyCode.F13, VirtualKeyCode.F13 },
+            { KeyCode.F14, VirtualKeyCode.F14 },
+            { KeyCode.F15, VirtualKeyCode.F15 },
+            { KeyCode.G, VirtualKeyCode.VK_G },
+            //{ KeyCode.Greater, VirtualKeyCode. },
+            { KeyCode.H, VirtualKeyCode.VK_H },
+            //{ KeyCode.Hash, VirtualKeyCode. },
+            { KeyCode.Help, VirtualKeyCode.HELP },
+            { KeyCode.Home, VirtualKeyCode.HOME },
+            { KeyCode.I, VirtualKeyCode.VK_I },
+            { KeyCode.Insert, VirtualKeyCode.INSERT },
+            { KeyCode.J, VirtualKeyCode.VK_J },
+            { KeyCode.K, VirtualKeyCode.VK_K},
+            { KeyCode.Keypad0, VirtualKeyCode.NUMPAD0 },
+            { KeyCode.Keypad1, VirtualKeyCode.NUMPAD1 },
+            { KeyCode.Keypad2, VirtualKeyCode.NUMPAD2 },
+            { KeyCode.Keypad3, VirtualKeyCode.NUMPAD3 },
+            { KeyCode.Keypad4, VirtualKeyCode.NUMPAD4 },
+            { KeyCode.Keypad5, VirtualKeyCode.NUMPAD5 },
+            { KeyCode.Keypad6, VirtualKeyCode.NUMPAD6 },
+            { KeyCode.Keypad7, VirtualKeyCode.NUMPAD7 },
+            { KeyCode.Keypad8, VirtualKeyCode.NUMPAD8 },
+            { KeyCode.Keypad9, VirtualKeyCode.NUMPAD9 },
+            { KeyCode.KeypadDivide, VirtualKeyCode.DIVIDE },
+            { KeyCode.KeypadEnter, VirtualKeyCode.RETURN },
+            //{ KeyCode.KeypadEquals, VirtualKeyCode. },
+            { KeyCode.KeypadMinus, VirtualKeyCode.OEM_MINUS },
+            { KeyCode.KeypadMultiply, VirtualKeyCode.MULTIPLY },
+            { KeyCode.KeypadPeriod, VirtualKeyCode.OEM_PERIOD },
+            { KeyCode.KeypadPlus, VirtualKeyCode.OEM_PLUS },
+            { KeyCode.L, VirtualKeyCode.VK_L },
+            { KeyCode.LeftAlt, VirtualKeyCode.LMENU },
+            { KeyCode.LeftApple, VirtualKeyCode.LCONTROL },
+            { KeyCode.LeftArrow, VirtualKeyCode.LEFT },
+            { KeyCode.LeftBracket, VirtualKeyCode.OEM_4 },
+            { KeyCode.LeftCommand, VirtualKeyCode.LCONTROL },
+            { KeyCode.LeftControl, VirtualKeyCode.LCONTROL },
+            //{ KeyCode.LeftParen, VirtualKeyCode. },
+            { KeyCode.LeftShift, VirtualKeyCode.LSHIFT },
+            { KeyCode.LeftWindows, VirtualKeyCode.LWIN },
+            //{ KeyCode.Less, VirtualKeyCode. },
+            { KeyCode.M, VirtualKeyCode.VK_M },
+            { KeyCode.Menu, VirtualKeyCode.MENU },
+            { KeyCode.Minus, VirtualKeyCode.OEM_MINUS },
+            { KeyCode.Mouse0, VirtualKeyCode.LBUTTON },
+            { KeyCode.Mouse1, VirtualKeyCode.RBUTTON },
+            { KeyCode.Mouse2, VirtualKeyCode.MBUTTON },
+            { KeyCode.Mouse3, VirtualKeyCode.XBUTTON1 },
+            { KeyCode.Mouse4, VirtualKeyCode.XBUTTON2 },
+            //{ KeyCode.Mouse5, VirtualKeyCode. },
+            //{ KeyCode.Mouse6, VirtualKeyCode. },
+            { KeyCode.N, VirtualKeyCode.VK_N },
+            //{ KeyCode.None, VirtualKeyCode. },
+            { KeyCode.Numlock, VirtualKeyCode.NUMLOCK },
+            { KeyCode.O, VirtualKeyCode.VK_O },
+            { KeyCode.P, VirtualKeyCode.VK_P },
+            { KeyCode.PageDown, VirtualKeyCode.NEXT },
+            { KeyCode.PageUp, VirtualKeyCode.PRIOR },
+            { KeyCode.Pause, VirtualKeyCode.PAUSE },
+            { KeyCode.Period, VirtualKeyCode.OEM_PERIOD },
+            { KeyCode.Plus, VirtualKeyCode.OEM_PLUS },
+            { KeyCode.Print, VirtualKeyCode.PRINT },
+            { KeyCode.Q, VirtualKeyCode.VK_Q },
+            { KeyCode.Question, VirtualKeyCode.OEM_2 },
+            { KeyCode.Quote, VirtualKeyCode.OEM_7 },
+            { KeyCode.R, VirtualKeyCode.VK_R },
+            { KeyCode.Return, VirtualKeyCode.RETURN },
+            { KeyCode.RightAlt, VirtualKeyCode.RMENU },
+            { KeyCode.RightApple, VirtualKeyCode.RCONTROL },
+            { KeyCode.RightArrow, VirtualKeyCode.RIGHT },
+            { KeyCode.RightBracket, VirtualKeyCode.OEM_6 },
+            { KeyCode.RightCommand, VirtualKeyCode.RCONTROL },
+            { KeyCode.RightControl, VirtualKeyCode.RCONTROL },
+            //{ KeyCode.RightParen, VirtualKeyCode. },
+            { KeyCode.RightShift, VirtualKeyCode.RSHIFT },
+            { KeyCode.RightWindows, VirtualKeyCode.RWIN },
+            { KeyCode.S, VirtualKeyCode.VK_S },
+            { KeyCode.ScrollLock, VirtualKeyCode.SCROLL },
+            { KeyCode.Semicolon, VirtualKeyCode.OEM_1 },
+            { KeyCode.Slash, VirtualKeyCode.OEM_2 },
+            { KeyCode.Space, VirtualKeyCode.SPACE },
+            //{ KeyCode.SysReq, VirtualKeyCode. },
+            { KeyCode.T, VirtualKeyCode.VK_T },
+            { KeyCode.Tab, VirtualKeyCode.TAB },
+            { KeyCode.U, VirtualKeyCode.VK_U },
+            //{ KeyCode.Underscore, VirtualKeyCode. },
+            { KeyCode.UpArrow, VirtualKeyCode.UP },
+            { KeyCode.V, VirtualKeyCode.VK_V },
+            { KeyCode.W, VirtualKeyCode.VK_W },
+            { KeyCode.X, VirtualKeyCode.VK_X },
+            { KeyCode.Y, VirtualKeyCode.VK_Y },
+            { KeyCode.Z, VirtualKeyCode.VK_Z },
+        };
+
+        InputSimulator simulator = new InputSimulator();
         public void Update()
         {
-            
-            Input.GetKeyDown((KeyCode)ControllerInput.Vive.LeftMenu);
+            if ((Settings.InputMode & InputMode.System) != 0)
+                foreach (var binding in Settings.Bindings)
+                {
+                    if (Input.GetKeyDown(binding.SourceKey))
+                        simulator.Keyboard.KeyDown(codeConverter[binding.DestKey]);
+                    if (Input.GetKeyUp(binding.SourceKey))
+                        simulator.Keyboard.KeyUp(codeConverter[binding.DestKey]);
+                }
         }
 
         public void SceneManagerOnActiveSceneChanged(Scene arg0, Scene scene)
@@ -121,6 +274,7 @@ namespace BeatSaberMod
 
             CopySwitchSettingsController<EnableToggleSettingsController>("Enabled", mainContainer);
             CopyListSettingsController<InputMethodSettingsController>("Input Mode", mainContainer);
+            CopyListSettingsController<PressModeSettingsController>("Key Press Method", mainContainer);
             CopyListSettingsController<BindingEditorSelectorSettingsController>("Edit Binding", mainContainer);
 
             Transform menuParent = rightContainer;//sideMenuParentObject.transform;
@@ -142,11 +296,12 @@ namespace BeatSaberMod
                 keybBtnSel.ApplySettings();
             }
         }
-        public void SetSelectedBinding(int index)
+        public int GetSelectedBinding() => curSelectedBinding;
+        public void SetSelectedBinding(int index, bool noapply = false)
         {
             Console.WriteLine($"Selecting binding {index}");
 
-            if (index != curSelectedBinding)
+            if (!noapply && index != curSelectedBinding)
                 ApplyBindingSettings();
 
             Console.WriteLine("Applied old settings");
@@ -173,19 +328,16 @@ namespace BeatSaberMod
 
                 Console.WriteLine("Enabled parent");
                 Console.WriteLine($"{index} != {curSelectedBinding} : {index != curSelectedBinding}");
+            }
 
-                //Console.WriteLine((cntrlBtnSel as object).ToString());
-                //Console.WriteLine((keybBtnSel as object).ToString());
-
-                if (index != curSelectedBinding)
-                {
-                    cntrlBtnSel.SelectedIndex = index;
-                    cntrlBtnSel.Init();
-                    Console.WriteLine("Inited cntrlBtnSel");
-                    keybBtnSel.SelectedIndex = index;
-                    keybBtnSel.Init();
-                    Console.WriteLine("Inited keybBtnSel");
-                }
+            if (index != curSelectedBinding)
+            {
+                cntrlBtnSel.SelectedIndex = index;
+                cntrlBtnSel.Init();
+                Console.WriteLine("Inited cntrlBtnSel");
+                keybBtnSel.SelectedIndex = index;
+                keybBtnSel.Init();
+                Console.WriteLine("Inited keybBtnSel");
             }
 
             curSelectedBinding = index;
