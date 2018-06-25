@@ -29,7 +29,7 @@ namespace BeatSaberMod
         private bool _init = false;
 
         public string Name => "Keyboard Input Plugin";
-        public string Version => "0.0.1";
+        public string Version => "0.0.2";
         public void OnApplicationStart()
         {
             if (_init) return;
@@ -39,15 +39,6 @@ namespace BeatSaberMod
             SceneManager.sceneLoaded += SceneManager_sceneLoaded;
 
             Settings.Load();
-
-            /*if (Settings.Bindings.Count == 0)
-            {
-                Settings.Bindings.Add(new KeyBinding()
-                {
-                    SourceKey = (KeyCode)ControllerInput.Vive.RightTrackpadPress,
-                    DestKey = KeyCode.P
-                });
-            }*/
 
             foreach (var binding in Settings.Bindings)
                 Console.WriteLine(binding);

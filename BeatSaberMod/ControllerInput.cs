@@ -13,7 +13,9 @@ namespace BeatSaberMod
             LeftTrigger = KeyCode.JoystickButton14,
             RightTrigger = KeyCode.JoystickButton15,
             LeftTrackpadTouch = KeyCode.JoystickButton16,
-            RightTrackpadTouch = KeyCode.JoystickButton17
+            RightTrackpadTouch = KeyCode.JoystickButton17,
+            LeftControllerGrip = KeyCode.JoystickButton11,
+            RightControllerGrip = KeyCode.JoystickButton12
         }
         public enum Oculus
         {
