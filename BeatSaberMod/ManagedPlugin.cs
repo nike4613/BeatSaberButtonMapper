@@ -20,10 +20,16 @@ namespace BeatSaberMod
         {
             Log = logger;
 
+            IPAPlugin.shouldInit = false;
+
             harmony = HarmonyInstance.Create("com.cirr.beatsaber.keyboardinput");
             UnityEngineInputPatch.Patch(harmony);
 
             Log.Debug("UnityEngine.Input patched");
+
+            Settings.Load();
+
+            Log.SuperVerbose("Settings loaded");
         }
 
         public void OnApplicationQuit()
@@ -33,8 +39,6 @@ namespace BeatSaberMod
 
         public void OnApplicationStart()
         {
-            Settings.Load();
-
             foreach (var binding in Settings.Bindings)
                 Console.WriteLine(binding);
 

@@ -14,9 +14,11 @@ namespace BeatSaberMod
     public class IPAPlugin : IPlugin
     {
         private static bool init = false;
+        internal static bool shouldInit = true;
         private static HarmonyInstance harmony;
         public IPAPlugin()
         {
+            if (!shouldInit) throw new Exception("Tried to load IPA plugin when mod manager is present!");
             if (init) return;
             init = true;
 
