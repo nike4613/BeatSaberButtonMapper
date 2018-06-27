@@ -11,11 +11,11 @@ using BeatSaberMod.HarmonyPatches;
 
 namespace BeatSaberMod
 {
-    public class KeyboardInputPlugin : IPlugin
+    public class IPAPlugin : IPlugin
     {
         private static bool init = false;
         private static HarmonyInstance harmony;
-        static KeyboardInputPlugin()
+        public IPAPlugin()
         {
             if (init) return;
             init = true;
@@ -29,7 +29,7 @@ namespace BeatSaberMod
         private bool _init = false;
 
         public string Name => "Keyboard Input Plugin";
-        public string Version => "0.0.2";
+        public string Version => "0.0.3";
         public void OnApplicationStart()
         {
             if (_init) return;
