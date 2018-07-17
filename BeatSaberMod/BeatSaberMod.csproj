@@ -37,6 +37,10 @@
     <Reference Include="Assembly-CSharp">
       <HintPath>..\..\..\..\..\..\..\Game Library\Steam\steamapps\common\Beat Saber\Beat Saber_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
+    <Reference Include="Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Game Library\Steam\steamapps\common\Beat Saber\Beat Saber_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
     <Reference Include="BeatSaberModManager">
       <HintPath>..\..\BeatSaberModManager\BeatSaberModManager\bin\Release\BeatSaberModManager.dll</HintPath>
     </Reference>
@@ -76,6 +80,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HarmonyPatches\UnityEngineInputPatch.cs" />
+    <Compile Include="IPA\UI\BeatSaberUI.cs" />
+    <Compile Include="IPA\UI\BindingsConfigurationNavigationController.cs" />
+    <Compile Include="IPA\UI\PluginUI.cs" />
     <Compile Include="KeyboardInputObject.cs" />
     <Compile Include="ConfigViewController.cs" />
     <Compile Include="ControllerInput.cs" />

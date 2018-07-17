@@ -1,4 +1,5 @@
 ﻿using BeatSaberMod.HarmonyPatches;
+using BeatSaberMod.IPA.UI;
 using BeatSaberModManager.Meta;
 using BeatSaberModManager.Plugin;
 using BeatSaberModManager.Utilities.Logging;
@@ -55,6 +56,11 @@ namespace BeatSaberMod
 
         public void OnLevelWasLoaded(int level)
         {
+            if (level == 1)
+            { // main menu
+                BeatSaberUI.OnLoad();
+                PluginUI.OnLoad();
+            }
         }
 
         public void OnUpdate()

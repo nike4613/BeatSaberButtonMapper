@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BeatSaberMod.IPA.UI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,7 +27,7 @@ namespace BeatSaberMod.SettingsControllers
             }
 
             Console.WriteLine($"Selecting binding index {idx - 1}");
-            KeyboardInputObject.Instance.SetSelectedBinding(idx - 1);
+            BindingsConfigMainViewController.Instance._rightScreenController.SetSelectedBinding(idx - 1);
 
             return $"Binding {idx}";
         }

@@ -11,24 +11,24 @@ namespace BeatSaberMod
 {
     public class ConfigViewController : VRUIViewController
     {
-        protected bool _firstTimeActivated = true;
-
         public VRUIViewController _leftSettings;
         public VRUIViewController _rightSettings;
         public List<SimpleSettingsController> settingControllers = new List<SimpleSettingsController>();
-        protected override void DidActivate()
+        protected override void DidActivate(bool firstActivation, ActivationType activationType)
         {
-            base.DidActivate();
-            if (_firstTimeActivated)
+            if (activationType == ActivationType.AddedToHierarchy)
             {
-                _firstTimeActivated = false;
-                SetupButtons();
-                Init();
+                base.DidActivate(firstActivation, activationType);
+                if (firstActivation)
+                {
+                    SetupButtons();
+                    Init();
+                }
+                VRUIScreen leftScreen = screen.screenSystem.leftScreen;
+                VRUIScreen rightScreen = screen.screenSystem.rightScreen;
+                leftScreen.SetRootViewController(_leftSettings);
+                rightScreen.SetRootViewController(_rightSettings);
             }
-            VRUIScreen leftScreen = screen.screenSystem.leftScreen;
-            VRUIScreen rightScreen = screen.screenSystem.rightScreen;
-            leftScreen.SetRootViewController(_leftSettings);
-            rightScreen.SetRootViewController(_rightSettings);
         }
 
         void SetupButtons()
