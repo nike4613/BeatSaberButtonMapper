@@ -17,6 +17,7 @@ namespace BeatSaberMod
         WinMR
     }
 
+    [Flags]
     [Serializable]
     public enum InputMode
     {
@@ -44,9 +45,37 @@ namespace BeatSaberMod
     }
 
     [Serializable]
+    public enum ControllerAxis
+    {
+        TriggerLeftHand,
+        TriggerRightHand,
+        VerticalLeftHand,
+        VerticalRightHand,
+        HorizontalLeftHand,
+        HorizontalRightHand
+    }
+
+    [Serializable]
+    public class ControllerAxisBinding
+    {
+        public KeyCode SourceKey;
+
+        public ControllerAxis Axis;
+        public float? OffValue;
+        public float OnValue;
+
+        public override string ToString()
+        {
+            return $"{SourceKey.ToNiceName()} => {Axis.ToNiceName()}: {(OffValue == null ? "?" : OffValue.ToString())} - {OnValue}";
+        }
+    }
+
+    [Serializable]
     public class Settings
     {
-        static Settings instance = null;
+        static Settings instance = new Settings();
+
+        private bool ready = false;
 
         public bool enabled = true;
         public static bool Enabled { get => instance.enabled; set => instance.enabled = value; }
@@ -60,6 +89,8 @@ namespace BeatSaberMod
 
         public List<KeyBinding> bindings = new List<KeyBinding>();
         public static List<KeyBinding> Bindings { get => instance.bindings; }
+        public List<ControllerAxisBinding> axisBindings = new List<ControllerAxisBinding>();
+        public static List<ControllerAxisBinding> AxisBindings { get => instance.axisBindings; }
 
         public Settings()
         {
@@ -82,14 +113,20 @@ namespace BeatSaberMod
                 try
                 {
                     instance = (Settings)serializer.Deserialize(fstream);
+                    instance.ready = true;
                 }
-                catch (Exception ) { }
+                catch (Exception e) {
+                    Console.WriteLine(e.ToString());
+                }
                 fstream.Close();
             }
 
-            if (instance == null)
+            if (!instance.ready)
             {
-                instance = new Settings();
+                instance = new Settings()
+                {
+                    ready = true
+                };
             }
         }
 

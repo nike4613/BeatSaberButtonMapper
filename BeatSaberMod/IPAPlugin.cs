@@ -44,6 +44,21 @@ namespace BeatSaberMod
 
             foreach (var binding in Settings.Bindings)
                 Console.WriteLine(binding);
+            if (Settings.AxisBindings.Count == 0)
+            {
+                Console.WriteLine("No axis bindings avaliable");
+                Settings.AxisBindings.Add(new ControllerAxisBinding
+                {
+                    SourceKey = KeyCode.Return,
+                    Axis = ControllerAxis.TriggerRightHand,
+                    OnValue = 1.0f,
+                    OffValue = null
+                });
+            }
+            foreach (var axisBind in Settings.AxisBindings)
+                Console.WriteLine(axisBind);
+
+            Settings.Save();
 
             KeyboardInputObject.OnLoad();
         }
