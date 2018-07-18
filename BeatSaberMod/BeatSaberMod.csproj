@@ -37,9 +37,6 @@
     <Reference Include="Assembly-CSharp">
       <HintPath>..\..\..\..\..\..\..\Game Library\Steam\steamapps\common\Beat Saber\Beat Saber_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
-    <Reference Include="BeatSaberModManager">
-      <HintPath>..\..\BeatSaberModManager\BeatSaberModManager\bin\Release\BeatSaberModManager.dll</HintPath>
-    </Reference>
     <Reference Include="IllusionInjector">
       <HintPath>..\..\..\..\..\..\..\Game Library\Steam\steamapps\common\Beat Saber\Beat Saber_Data\Managed\IllusionInjector.dll</HintPath>
     </Reference>
@@ -73,6 +70,10 @@
     <Reference Include="UnityEngine.UIModule">
       <HintPath>..\..\..\..\..\..\..\Game Library\Steam\steamapps\common\Beat Saber\Beat Saber_Data\Managed\UnityEngine.UIModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.VRModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Game Library\Steam\steamapps\common\Beat Saber\Beat Saber_Data\Managed\UnityEngine.VRModule.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HarmonyPatches\UnityEngineInputPatch.cs" />
@@ -80,7 +81,6 @@
     <Compile Include="ConfigViewController.cs" />
     <Compile Include="ControllerInput.cs" />
     <Compile Include="IPAPlugin.cs" />
-    <Compile Include="ManagedPlugin.cs" />
     <Compile Include="Misc\EnumExtensions.cs" />
     <Compile Include="Misc\Utilites.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

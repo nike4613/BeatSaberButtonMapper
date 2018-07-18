@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Emit;
 using System.Text;
 using UnityEngine;
 
@@ -13,6 +14,7 @@ namespace BeatSaberMod.HarmonyPatches
         public static void Patch(HarmonyInstance harmony)
         {
             InputGetKeyAllPatch.Patch(harmony);
+            VRControllersInputManagerPatches.Patch(harmony);
         }
         
         //[HarmonyPatch(typeof(Input), "GetKeyDown", new Type[] { typeof(KeyCode) })]
@@ -52,6 +54,75 @@ namespace BeatSaberMod.HarmonyPatches
                 {
                     // do nothing
                 }
+            }
+        }
+
+        class VRControllersInputManagerPatches
+        {
+            public static void Patch(HarmonyInstance harmony)
+            {
+                var vrcon = typeof(VRControllersInputManager);
+                var self = typeof(VRControllersInputManagerPatches);
+
+                var triggerValue = vrcon.GetMethod("TriggerValue", new Type[] { typeof(UnityEngine.XR.XRNode) });
+                var horizontalValue = vrcon.GetMethod("HorizontalAxisValue", new Type[] { typeof(UnityEngine.XR.XRNode) });
+                var verticalValue = vrcon.GetMethod("VerticalAxisValue", new Type[] { typeof(UnityEngine.XR.XRNode) });
+
+                var transpiler = self.GetMethod("GetAxisTranspiler", BindingFlags.NonPublic | BindingFlags.Static);
+
+                harmony.Patch(triggerValue, null, null, new HarmonyMethod(transpiler));
+                harmony.Patch(horizontalValue, null, null, new HarmonyMethod(transpiler));
+                harmony.Patch(verticalValue, null, null, new HarmonyMethod(transpiler));
+            }
+
+            private static IEnumerable<CodeInstruction> GetAxisTranspiler(IEnumerable<CodeInstruction> instructions)
+            {
+                MethodInfo toReplace = typeof(Input).GetMethod("GetAxis", new Type[] { typeof(string) });
+                MethodInfo replacement =
+                    typeof(VRControllersInputManagerPatches).GetMethod("GetAxisSubstitute", BindingFlags.NonPublic | BindingFlags.Static, null, new Type[] { typeof(string) }, new ParameterModifier[] { });
+
+                var codes = new List<CodeInstruction>(instructions);
+
+                foreach (var code in codes)
+                {
+                    if (code.opcode == OpCodes.Call)
+                    {
+                        code.operand = replacement;
+                    }
+                }
+
+                return codes;
+            }
+
+            private static float GetAxisSubstitute(string saxis)
+            {
+                ControllerAxis? axis = null;
+                try
+                {
+                    axis = (ControllerAxis)Enum.Parse(typeof(ControllerAxis), saxis);
+                }
+                catch (ArgumentException)
+                { // no matching name
+                  // no problem
+                }
+
+                float value = Input.GetAxis(saxis);
+
+                if (Settings.Enabled && axis != null)
+                {
+                    foreach (var binding in Settings.AxisBindings)
+                    {
+                        if (binding.Axis == axis.Value)
+                        {
+                            if (binding.OffValue != null && !Input.GetKey(binding.SourceKey))
+                                value = binding.OffValue.Value;
+                            else if (Input.GetKey(binding.SourceKey))
+                                value = binding.OnValue;
+                        }
+                    }
+                }
+
+                return value;
             }
         }
     }

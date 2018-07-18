@@ -200,6 +200,8 @@ namespace BeatSaberMod
         public void Update()
         {
             if ((Settings.InputMode & InputMode.System) != 0)
+            {
+                //Console.WriteLine("checking for input");
                 foreach (var binding in Settings.Bindings)
                 {
                     if (Input.GetKeyDown(binding.SourceKey))
@@ -207,6 +209,8 @@ namespace BeatSaberMod
                     if (Input.GetKeyUp(binding.SourceKey))
                         simulator.Keyboard.KeyUp(codeConverter[binding.DestKey]);
                 }
+                //Console.WriteLine("input checked");
+            }
         }
 
         public void SceneManagerOnActiveSceneChanged(Scene arg0, Scene scene)
@@ -427,7 +431,7 @@ namespace BeatSaberMod
             DestroyImmediate(btn.GetComponent<GameEventOnUIButtonClick>());
             btn.onClick = new Button.ButtonClickedEvent();
 
-            (btn.transform as RectTransform).anchoredPosition = new Vector2(-7f, 18f);
+            (btn.transform as RectTransform).anchoredPosition = new Vector2(-7f, 30f);
             (btn.transform as RectTransform).sizeDelta = new Vector2(28f, 10f);
 
             btn.GetComponentInChildren<TextMeshProUGUI>().text = "Keybinds";
