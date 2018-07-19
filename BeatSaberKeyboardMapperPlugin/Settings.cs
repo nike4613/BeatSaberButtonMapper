@@ -137,6 +137,7 @@ namespace BeatSaberKeyboardMapperPlugin
                         var kb = new ControllerAxisBinding
                         {
                             SourceKey = (KeyCode)Enum.Parse(typeof(KeyCode), obj["source"].Value),
+                            Axis = (ControllerAxis)Enum.Parse(typeof(ControllerAxis), obj["axis"].Value),
                             OnValue = (float)obj["on"].AsDouble
                         };
                         if (obj.Linq.Any(KeySel("off"))) // has key
@@ -145,6 +146,8 @@ namespace BeatSaberKeyboardMapperPlugin
                             kb.OffValue = null;
                         instance.axisBindings.Add(kb);
                     }
+
+                    instance.ready = true;
                 }
                 catch (Exception e)
                 {
@@ -163,7 +166,33 @@ namespace BeatSaberKeyboardMapperPlugin
 
         public static void Save()
         {
-            
+            var root = new JSONObject();
+            root["enabled"] = instance.enabled;
+            root["controller"] = instance.controllerMode.ToString();
+            root["input"] = instance.inputMode.ToString();
+
+            var bindArr = (root["keybinds"] = new JSONArray()).AsArray;
+            foreach (var val in instance.bindings)
+            {
+                var obj = new JSONObject();
+                obj["source"] = val.SourceKey.ToString();
+                obj["dest"] = val.SourceKey.ToString();
+                bindArr.Add(obj);
+            }
+
+            var axisArr = (root["axisbinds"] = new JSONArray()).AsArray;
+            foreach (var val in instance.axisBindings)
+            {
+                var obj = new JSONObject();
+                obj["source"] = val.SourceKey.ToString();
+                obj["axis"] = val.Axis.ToString();
+                obj["on"] = val.OnValue;
+                if (val.OffValue != null)
+                    obj["off"] = val.OffValue.Value;
+                axisArr.Add(obj);
+            }
+
+            File.WriteAllText(SettingsPath(), root.ToString(2));
         }
     }
 }

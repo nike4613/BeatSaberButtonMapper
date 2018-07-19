@@ -33,7 +33,7 @@ namespace BeatSaberKeyboardMapperPlugin
 #if MANAGED
                 _mlog.Log((LoggerBase.Level)level, message, args);
 #else
-                Console.WriteLine(message);
+                Console.WriteLine(message, args);
 #endif
             }
             public void Log(Level level, Exception exeption) => Log(level, exeption.ToString());

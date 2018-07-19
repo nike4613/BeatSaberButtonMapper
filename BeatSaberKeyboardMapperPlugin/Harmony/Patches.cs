@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace BeatSaberKeyboardMapperPlugin.Harmony
 {
-    public class Patches
+    public class BeatSaberPatches
     {
         public static void Patch(HarmonyInstance harmony)
         {
