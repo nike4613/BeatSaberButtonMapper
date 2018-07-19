@@ -5,18 +5,19 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
+using System.Threading.Tasks;
 using UnityEngine;
 
-namespace BeatSaberMod.HarmonyPatches
+namespace BeatSaberKeyboardMapperPlugin.Harmony
 {
-    class UnityEngineInputPatch
+    public class Patches
     {
         public static void Patch(HarmonyInstance harmony)
         {
             InputGetKeyAllPatch.Patch(harmony);
             VRControllersInputManagerPatches.Patch(harmony);
         }
-        
+
         //[HarmonyPatch(typeof(Input), "GetKeyDown", new Type[] { typeof(KeyCode) })]
         class InputGetKeyAllPatch
         {
@@ -37,7 +38,7 @@ namespace BeatSaberMod.HarmonyPatches
             }
 
             public static void GetKeyAllPost(ref bool __result, MethodBase __originalMethod, KeyCode key)
-            { 
+            {
                 // it would return true anyway, the plugin isn't enabled, or the input mode doesn't include default
                 if (__result || !Settings.Enabled || (Settings.InputMode & InputMode.Default) == 0) return;
                 try

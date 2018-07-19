@@ -1,13 +1,14 @@
-﻿using BeatSaberMod.Misc;
+﻿using BeatSaberKeyboardMapperPlugin.Utilities;
+using SimpleJSON;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Xml.Serialization;
+using System.Threading.Tasks;
 using UnityEngine;
 
-namespace BeatSaberMod
+namespace BeatSaberKeyboardMapperPlugin
 {
     [Serializable]
     public enum ControllerMode
@@ -99,7 +100,7 @@ namespace BeatSaberMod
 
         public static string SettingsPath()
         {
-            return Path.Combine(Environment.CurrentDirectory, "keybinds.cfg");
+            return Path.Combine(Environment.CurrentDirectory, "keybinds.json");
         }
 
         public static void Load()
@@ -108,17 +109,47 @@ namespace BeatSaberMod
             string filePath = SettingsPath();
             if (File.Exists(filePath))
             {
-                var fstream = File.OpenRead(SettingsPath());
-                XmlSerializer serializer = new XmlSerializer(typeof(Settings));
+                Func<KeyValuePair<string, JSONNode>, bool> KeySel(string n) => (KeyValuePair<string, JSONNode> p) => p.Key == n;
                 try
                 {
-                    instance = (Settings)serializer.Deserialize(fstream);
-                    instance.ready = true;
+                    instance = new Settings();
+
+                    var str = File.ReadAllText(filePath);
+                    var json = JSON.Parse(str).AsObject;
+
+                    instance.enabled = json["enabled"].AsBool;
+                    instance.controllerMode = (ControllerMode)Enum.Parse(typeof(ControllerMode), json["controller"].Value);
+                    instance.inputMode = (InputMode)Enum.Parse(typeof(InputMode), json["input"].Value);
+
+                    foreach (var val in json["keybinds"].AsArray.Children)
+                    {
+                        var obj = val.AsObject;
+                        var kb = new KeyBinding
+                        {
+                            SourceKey = (KeyCode)Enum.Parse(typeof(KeyCode), obj["source"].Value),
+                            DestKey = (KeyCode)Enum.Parse(typeof(KeyCode), obj["dest"].Value)
+                        };
+                        instance.bindings.Add(kb);
+                    }
+                    foreach (var val in json["axisbinds"].AsArray.Children)
+                    {
+                        var obj = val.AsObject;
+                        var kb = new ControllerAxisBinding
+                        {
+                            SourceKey = (KeyCode)Enum.Parse(typeof(KeyCode), obj["source"].Value),
+                            OnValue = (float)obj["on"].AsDouble
+                        };
+                        if (obj.Linq.Any(KeySel("off"))) // has key
+                            kb.OffValue = (float)obj["off"].AsDouble;
+                        else
+                            kb.OffValue = null;
+                        instance.axisBindings.Add(kb);
+                    }
                 }
-                catch (Exception e) {
+                catch (Exception e)
+                {
                     Console.WriteLine(e.ToString());
                 }
-                fstream.Close();
             }
 
             if (!instance.ready)
@@ -132,10 +163,7 @@ namespace BeatSaberMod
 
         public static void Save()
         {
-            var fstream = File.Open(SettingsPath(), FileMode.Create, FileAccess.Write);
-            XmlSerializer serializer = new XmlSerializer(typeof(Settings));
-            serializer.Serialize(fstream, instance);
-            fstream.Close();
+            
         }
     }
 }

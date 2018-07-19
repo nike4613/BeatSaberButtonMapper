@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace BeatSaberMod.Misc
+namespace BeatSaberKeyboardMapperPlugin.Utilities
 {
-    public class Utilities
+    public static class Extensions
     {
+        public static string ToNiceName(this Enum enu) =>
+            AddSpacesToSentence(enu.ToString(), true);
+
         public static string AddSpacesToSentence(string text, bool preserveAcronyms)
         {
             if (text == null || text.Trim().Length == 0)
