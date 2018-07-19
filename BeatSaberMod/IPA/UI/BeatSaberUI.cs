@@ -12,6 +12,7 @@ using UnityEngine.UI;
 using VRUI;
 using Image = UnityEngine.UI.Image;
 
+// Copied straight out of the UI wizard's code https://github.com/andruzzzhka/BeatSaverDownloader
 namespace BeatSaberMod.IPA.UI
 {
     class BeatSaberUI : MonoBehaviour

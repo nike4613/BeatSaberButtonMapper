@@ -25,7 +25,7 @@ namespace BeatSaberMod.IPA.UI
             {
                 return;
             }
-            new GameObject("BeatSaver Plugin").AddComponent<PluginUI>();
+            new GameObject("KBI Plugin UI").AddComponent<PluginUI>();
         }
 
         public void Awake()
