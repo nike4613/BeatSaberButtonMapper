@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if IPA && !MANAGED
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -43,10 +45,10 @@ namespace BeatSaberMod
             Settings.Load();
 
             foreach (var binding in Settings.Bindings)
-                Console.WriteLine(binding);
+                Logging.log.Debug(binding.ToString());
             if (Settings.AxisBindings.Count == 0)
             {
-                Console.WriteLine("No axis bindings avaliable");
+                Logging.log.Debug("No axis bindings avaliable");
                 Settings.AxisBindings.Add(new ControllerAxisBinding
                 {
                     SourceKey = KeyCode.Return,
@@ -56,7 +58,7 @@ namespace BeatSaberMod
                 });
             }
             foreach (var axisBind in Settings.AxisBindings)
-                Console.WriteLine(axisBind);
+                Logging.log.Debug(axisBind.ToString());
 
             Settings.Save();
 
@@ -96,3 +98,4 @@ namespace BeatSaberMod
         }
     }
 }
+#endif

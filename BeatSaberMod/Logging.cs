@@ -1,0 +1,77 @@
+﻿using BeatSaberModManager.Utilities.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BeatSaberMod
+{
+    internal class Logging
+    {
+#if IPA && !MANAGED
+        public static IPALog log = new IPALog();
+#endif
+#if MANAGED
+        public static LoggerBase _log;
+        public static ManagedLogger log = new ManagedLogger();
+#endif
+    }
+
+#if MANAGED
+    internal class ManagedLogger
+    {
+        public void Log(Level level, string message, params object[] args)
+        {
+            Logging._log.Log((LoggerBase.Level)level, message, args);
+        }
+        public void Log(Level level, Exception exeption) => Log(level, exeption.ToString());
+        public void SuperVerbose(string message, params object[] args) => Log(Level.SuperVerbose, message, args);
+        public void SuperVerbose(Exception e) => Log(Level.SuperVerbose, e);
+        public void Debug(string message, params object[] args) => Log(Level.Debug, message, args);
+        public void Debug(Exception e) => Log(Level.Debug, e);
+        public void Info(string message, params object[] args) => Log(Level.Info, message, args);
+        public void Info(Exception e) => Log(Level.Info, e);
+        public void Warn(string message, params object[] args) => Log(Level.Warning, message, args);
+        public void Warn(Exception e) => Log(Level.Warning, e);
+        public void Error(string message, params object[] args) => Log(Level.Error, message, args);
+        public void Error(Exception e) => Log(Level.Error, e);
+        public void Critical(string message, params object[] args) => Log(Level.Critical, message, args);
+        public void Critical(Exception e) => Log(Level.Critical, e);
+    }
+#endif
+
+    internal enum Level : byte
+    {
+        None = 0,
+        Debug = 1,
+        Info = 2,
+        Warning = 4,
+        Error = 8,
+        Critical = 16,
+        SuperVerbose = 32
+    }
+
+#if IPA && !MANAGED
+    internal class IPALog
+    {
+        public void Log(Level level, string message, params object[] args)
+        {
+            Console.WriteLine(message);
+        }
+        public void Log(Level level, Exception exeption) => Log(level, exeption.ToString());
+        public void SuperVerbose(string message, params object[] args) => Log(Level.SuperVerbose, message, args);
+        public void SuperVerbose(Exception e) => Log(Level.SuperVerbose, e);
+        public void Debug(string message, params object[] args) => Log(Level.Debug, message, args);
+        public void Debug(Exception e) => Log(Level.Debug, e);
+        public void Info(string message, params object[] args) => Log(Level.Info, message, args);
+        public void Info(Exception e) => Log(Level.Info, e);
+        public void Warn(string message, params object[] args) => Log(Level.Warning, message, args);
+        public void Warn(Exception e) => Log(Level.Warning, e);
+        public void Error(string message, params object[] args) => Log(Level.Error, message, args);
+        public void Error(Exception e) => Log(Level.Error, e);
+        public void Critical(string message, params object[] args) => Log(Level.Critical, message, args);
+        public void Critical(Exception e) => Log(Level.Critical, e);
+    }
+#endif
+}

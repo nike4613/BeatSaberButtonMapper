@@ -26,7 +26,7 @@ namespace BeatSaberMod.SettingsControllers
                 return "None";
             }
 
-            Console.WriteLine($"Selecting binding index {idx - 1}");
+            Logging.log.Debug($"Selecting binding index {idx - 1}");
             BindingsConfigMainViewController.Instance._rightScreenController.SetSelectedBinding(idx - 1);
 
             return $"Binding {idx}";

@@ -53,7 +53,7 @@ namespace BeatSaberMod.IPA.UI
             }
             catch (Exception e)
             {
-                Console.WriteLine($"EXCEPTION ON AWAKE(TRY FIND BUTTONS): {e}");
+                Logging.log.Critical($"EXCEPTION ON AWAKE(TRY FIND BUTTONS): {e}");
             }
 
             initialized = true;

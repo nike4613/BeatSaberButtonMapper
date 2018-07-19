@@ -38,37 +38,37 @@ namespace BeatSaberMod.IPA.UI
             public int GetSelectedBinding() => curSelectedBinding;
             public void SetSelectedBinding(int index, bool noapply = false)
             {
-                Console.WriteLine($"Selecting binding {index}");
+                Logging.log.Debug($"Selecting binding {index}");
 
                 if (!noapply && index != curSelectedBinding)
                     ApplyBindingSettings();
 
-                Console.WriteLine("Applied old settings");
+                Logging.log.Debug("Applied old settings");
 
                 if (index == -1)
                 {
                     cntrlBtnSel.gameObject.SetActive(false);
                     keybBtnSel.gameObject.SetActive(false);
 
-                    Console.WriteLine("Disabled parent");
+                    Logging.log.Debug("Disabled parent");
                 }
                 else
                 {
                     cntrlBtnSel.gameObject.SetActive(true);
                     keybBtnSel.gameObject.SetActive(true);
 
-                    Console.WriteLine("Enabled parent");
-                    Console.WriteLine($"{index} != {curSelectedBinding} : {index != curSelectedBinding}");
+                    Logging.log.Debug("Enabled parent");
+                    Logging.log.Debug($"{index} != {curSelectedBinding} : {index != curSelectedBinding}");
                 }
 
                 if (index != curSelectedBinding)
                 {
                     cntrlBtnSel.SelectedIndex = index;
                     cntrlBtnSel.Init();
-                    Console.WriteLine("Inited cntrlBtnSel");
+                    Logging.log.Debug("Inited cntrlBtnSel");
                     keybBtnSel.SelectedIndex = index;
                     keybBtnSel.Init();
-                    Console.WriteLine("Inited keybBtnSel");
+                    Logging.log.Debug("Inited keybBtnSel");
                 }
 
                 curSelectedBinding = index;

@@ -1,4 +1,5 @@
-﻿using BeatSaberMod.HarmonyPatches;
+﻿#if MANAGED
+using BeatSaberMod.HarmonyPatches;
 using BeatSaberMod.IPA.UI;
 using BeatSaberModManager.Meta;
 using BeatSaberModManager.Plugin;
@@ -8,29 +9,31 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 namespace BeatSaberMod
 {
-    [BeatSaberPlugin]
+    [BeatSaberPlugin(name: "KeyboardInput")]
     class ManagedPlugin : IBeatSaberPlugin
     {
-        public static LoggerBase Log;
         private static HarmonyInstance harmony;
+
+        public Version Version => new Version(0, 0, 3);
 
         public void Init(LoggerBase logger)
         {
-            Log = logger;
+            Logging._log = logger;
 
-            IPAPlugin.shouldInit = false;
+            //IPAPlugin.shouldInit = false;
 
             harmony = HarmonyInstance.Create("com.cirr.beatsaber.keyboardinput");
             UnityEngineInputPatch.Patch(harmony);
 
-            Log.Debug("UnityEngine.Input patched");
+            Logging.log.Debug("UnityEngine.Input patched");
 
             Settings.Load();
 
-            Log.SuperVerbose("Settings loaded");
+            Logging.log.SuperVerbose("Settings loaded");
         }
 
         public void OnApplicationQuit()
@@ -41,7 +44,22 @@ namespace BeatSaberMod
         public void OnApplicationStart()
         {
             foreach (var binding in Settings.Bindings)
-                Console.WriteLine(binding);
+                Logging.log.Debug(binding.ToString());
+            if (Settings.AxisBindings.Count == 0)
+            {
+                Logging.log.Debug("No axis bindings avaliable");
+                Settings.AxisBindings.Add(new ControllerAxisBinding
+                {
+                    SourceKey = KeyCode.Return,
+                    Axis = ControllerAxis.TriggerRightHand,
+                    OnValue = 1.0f,
+                    OffValue = null
+                });
+            }
+            foreach (var axisBind in Settings.AxisBindings)
+                Logging.log.Debug(axisBind.ToString());
+
+            Settings.Save();
 
             KeyboardInputObject.OnLoad();
         }
@@ -68,3 +86,5 @@ namespace BeatSaberMod
         }
     }
 }
+
+#endif

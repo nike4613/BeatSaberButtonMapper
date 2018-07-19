@@ -44,7 +44,7 @@ namespace BeatSaberMod
                 SceneManager.activeSceneChanged += SceneManagerOnActiveSceneChanged;
                 DontDestroyOnLoad(gameObject);
 
-                Console.WriteLine("KBI started.");
+                Logging.log.Info("KBI started.");
             }
             else
             {
@@ -134,7 +134,6 @@ namespace BeatSaberMod
             { KeyCode.KeypadPlus, VirtualKeyCode.OEM_PLUS },
             { KeyCode.L, VirtualKeyCode.VK_L },
             { KeyCode.LeftAlt, VirtualKeyCode.LMENU },
-            { KeyCode.LeftApple, VirtualKeyCode.LCONTROL },
             { KeyCode.LeftArrow, VirtualKeyCode.LEFT },
             { KeyCode.LeftBracket, VirtualKeyCode.OEM_4 },
             { KeyCode.LeftCommand, VirtualKeyCode.LCONTROL },
@@ -170,7 +169,6 @@ namespace BeatSaberMod
             { KeyCode.R, VirtualKeyCode.VK_R },
             { KeyCode.Return, VirtualKeyCode.RETURN },
             { KeyCode.RightAlt, VirtualKeyCode.RMENU },
-            { KeyCode.RightApple, VirtualKeyCode.RCONTROL },
             { KeyCode.RightArrow, VirtualKeyCode.RIGHT },
             { KeyCode.RightBracket, VirtualKeyCode.OEM_6 },
             { KeyCode.RightCommand, VirtualKeyCode.RCONTROL },
@@ -303,12 +301,12 @@ namespace BeatSaberMod
         public int GetSelectedBinding() => curSelectedBinding;
         public void SetSelectedBinding(int index, bool noapply = false)
         {
-            Console.WriteLine($"Selecting binding {index}");
+            Logging.log.Debug($"Selecting binding {index}");
 
             if (!noapply && index != curSelectedBinding)
                 ApplyBindingSettings();
 
-            Console.WriteLine("Applied old settings");
+            Logging.log.Debug("Applied old settings");
 
             if (index == -1)
             {
@@ -319,7 +317,7 @@ namespace BeatSaberMod
                 rendr = keybBtnSel.gameObject.GetComponent<Renderer>();
                 if (rendr != null) rendr.enabled = false;
 
-                Console.WriteLine("Disabled parent");
+                Logging.log.Debug("Disabled parent");
             }
             else
             {
@@ -330,18 +328,18 @@ namespace BeatSaberMod
                 rendr = keybBtnSel.gameObject.GetComponent<MeshRenderer>();
                 if (rendr != null) rendr.enabled = true;
 
-                Console.WriteLine("Enabled parent");
-                Console.WriteLine($"{index} != {curSelectedBinding} : {index != curSelectedBinding}");
+                Logging.log.Debug("Enabled parent");
+                Logging.log.Debug($"{index} != {curSelectedBinding} : {index != curSelectedBinding}");
             }
 
             if (index != curSelectedBinding)
             {
                 cntrlBtnSel.SelectedIndex = index;
                 cntrlBtnSel.Init();
-                Console.WriteLine("Inited cntrlBtnSel");
+                Logging.log.Debug("Inited cntrlBtnSel");
                 keybBtnSel.SelectedIndex = index;
                 keybBtnSel.Init();
-                Console.WriteLine("Inited keybBtnSel");
+                Logging.log.Debug("Inited keybBtnSel");
             }
 
             curSelectedBinding = index;
@@ -440,7 +438,7 @@ namespace BeatSaberMod
 
         public void ShowSettings()
         {
-            Console.WriteLine("Showing Settings");
+            Logging.log.Debug("Showing Settings");
             settingsView.Init();
             _mainMenuViewController.PresentModalViewController(settingsView, null, false);
         }

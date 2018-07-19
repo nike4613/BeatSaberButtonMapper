@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BeatSaberMod</RootNamespace>
     <AssemblyName>BeatSaberMod</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -18,7 +18,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;MANAGED</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
@@ -43,8 +43,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\..\Game Library\Steam\steamapps\common\Beat Saber\Beat Saber_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
-    <Reference Include="BeatSaberModManager">
-      <HintPath>..\..\BeatSaberModManager\BeatSaberModManager\bin\Release\BeatSaberModManager.dll</HintPath>
+    <Reference Include="BeatSaberModManager, Version=0.1.1.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\BeatSaberModManager\BeatSaberModManager\bin\Debug\BeatSaberModManager.dll</HintPath>
     </Reference>
     <Reference Include="IllusionInjector">
       <HintPath>..\..\..\..\..\..\..\Game Library\Steam\steamapps\common\Beat Saber\Beat Saber_Data\Managed\IllusionInjector.dll</HintPath>
@@ -93,6 +94,8 @@
     <Compile Include="ConfigViewController.cs" />
     <Compile Include="ControllerInput.cs" />
     <Compile Include="IPAPlugin.cs" />
+    <Compile Include="Logging.cs" />
+    <Compile Include="ManagedPlugin.cs" />
     <Compile Include="Misc\EnumExtensions.cs" />
     <Compile Include="Misc\Utilites.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
