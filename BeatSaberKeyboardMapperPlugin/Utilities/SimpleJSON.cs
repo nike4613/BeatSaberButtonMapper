@@ -1,4 +1,5 @@
-﻿/* * * * *
+﻿#if !MANAGED
+/* * * * *
  * A simple JSON Parser / builder
  * ------------------------------
  * 
@@ -1351,3 +1352,4 @@ namespace SimpleJSON
         }
     }
 }
+#endif

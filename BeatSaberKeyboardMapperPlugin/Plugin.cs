@@ -1,5 +1,6 @@
 ﻿using BeatSaberKeyboardMapperPlugin.Harmony;
 using BeatSaberKeyboardMapperPlugin.UI;
+using BeatSaberKeyboardMapperPlugin.UI.Plugin;
 #if MANAGED
 using BeatSaberModManager.Meta;
 using BeatSaberModManager.Plugin;
@@ -65,21 +66,13 @@ namespace BeatSaberKeyboardMapperPlugin
 
         public void OnApplicationStart()
         {
-            Logger.log.Debug("Plugin OnApplicationStart");
+#if DEBUG
+            Logger.log.Info("Built with DEBUG symbol");
+            Logger.log.Info("Press '\\' to open the UI");
+#endif
 
             foreach (var binding in Settings.Bindings)
                 Logger.log.Debug(binding.ToString());
-            if (Settings.AxisBindings.Count == 0)
-            {
-                Logger.log.Debug("No axis bindings avaliable");
-                Settings.AxisBindings.Add(new ControllerAxisBinding
-                {
-                    SourceKey = KeyCode.Return,
-                    Axis = ControllerAxis.TriggerRightHand,
-                    OnValue = 1.0f,
-                    OffValue = null
-                });
-            }
             foreach (var axisBind in Settings.AxisBindings)
                 Logger.log.Debug(axisBind.ToString());
 
@@ -99,14 +92,33 @@ namespace BeatSaberKeyboardMapperPlugin
         {
             if (level == 1)
             {
-                BeatSaberUI.OnLoad(); // init the UI lib
-                UI.Plugin.PluginUI.OnLoad(); // init our UI
+                //BeatSaberUI.OnLoad(); // init the UI lib
+                //UI.Plugin.PluginUI.OnLoad(); // init our UI
+
+                PluginUI.Init();
             }
         }
 
+#if DEBUG
+        private bool inUi = false;
+#endif
         public void OnUpdate()
         {
-
+#if DEBUG
+            /*if (Input.GetKeyDown(KeyCode.Backslash))
+            {
+                if (!inUi)
+                {
+                    UI.Plugin.PluginUI.instance.PresentSettings();
+                    inUi = true;
+                }
+                else
+                {
+                    UI.Plugin.PluginUI.instance.HideSettings();
+                    inUi = false;
+                }
+            }*/
+#endif
         }
     }
 }
