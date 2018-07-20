@@ -1,4 +1,6 @@
-﻿using BeatSaberModManager.Utilities.Logging;
+﻿#if MANAGED
+using BeatSaberModManager.Utilities.Logging;
+#endif
 using System;
 using System.Collections.Generic;
 using System.Linq;

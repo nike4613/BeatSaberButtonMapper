@@ -1,8 +1,10 @@
 ﻿using BeatSaberKeyboardMapperPlugin.Harmony;
 using BeatSaberKeyboardMapperPlugin.UI;
+#if MANAGED
 using BeatSaberModManager.Meta;
 using BeatSaberModManager.Plugin;
 using BeatSaberModManager.Utilities.Logging;
+#endif
 using Harmony;
 using IllusionPlugin;
 using System;
@@ -21,12 +23,12 @@ namespace BeatSaberKeyboardMapperPlugin
     public class Plugin : IPlugin
 #endif
     {
+#if !MANAGED
         public Plugin()
         {
-#if !MANAGED
             EarlyInit();
-#endif
         }
+#endif
 
         private Version _version = new Version(0, 1, 0);
 
