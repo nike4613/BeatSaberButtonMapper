@@ -103,6 +103,8 @@ namespace BeatSaberKeyboardMapperPlugin.UI.Plugin
         {
             var submenu = CreateSubMenu("Keyboard Mapper");
             AddToggleSetting<EnabledSettingController>("Enabled", submenu);
+            AddListSetting<InputModeSettingController>("Input Type", submenu);
+            AddListSetting<ControllerModeSettingController>("Controller Type", submenu);
         }
 
         public const int MainScene = 1;
