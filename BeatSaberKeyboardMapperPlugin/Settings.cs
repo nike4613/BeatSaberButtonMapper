@@ -100,7 +100,7 @@ namespace BeatSaberKeyboardMapperPlugin
 
         public static string SettingsPath()
         {
-            return Path.Combine(Environment.CurrentDirectory, "keybinds.json");
+            return Path.Combine(Environment.CurrentDirectory, "UserData", "keybinds.json");
         }
 
         public static void Load()
