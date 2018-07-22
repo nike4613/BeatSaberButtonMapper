@@ -107,6 +107,8 @@ namespace BeatSaberKeyboardMapperPlugin
         {
 
             string filePath = SettingsPath();
+            if (!Directory.Exists(Path.GetDirectoryName(filePath)))
+                Directory.CreateDirectory(Path.GetDirectoryName(filePath));
             if (File.Exists(filePath))
             {
                 Func<KeyValuePair<string, JSONNode>, bool> KeySel(string n) => (KeyValuePair<string, JSONNode> p) => p.Key == n;
