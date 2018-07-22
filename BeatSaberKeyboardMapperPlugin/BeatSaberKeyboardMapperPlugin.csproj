@@ -101,7 +101,6 @@
     <Compile Include="UI\Plugin\SettingsControllers\EnabledSettingController.cs" />
     <Compile Include="UI\Plugin\SettingsControllers\InputModeSettingController.cs" />
     <Compile Include="UI\Plugin\ViewControllers\BindingConfigViewController.cs" />
-    <Compile Include="UI\Plugin\ViewControllers\KeyboardMapperSettingsViewController.cs" />
     <Compile Include="UI\Plugin\PluginUI.cs" />
     <Compile Include="UI\Plugin\ViewControllers\SettingsListViewController.cs" />
     <Compile Include="Utilities\Extensions.cs" />

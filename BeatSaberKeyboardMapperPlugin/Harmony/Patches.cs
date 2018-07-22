@@ -7,6 +7,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using static VRUI.VRUIViewController;
 
 namespace BeatSaberKeyboardMapperPlugin.Harmony
 {
@@ -16,6 +17,7 @@ namespace BeatSaberKeyboardMapperPlugin.Harmony
         {
             InputGetKeyAllPatch.Patch(harmony);
             VRControllersInputManagerPatches.Patch(harmony);
+            SettingsControllerFixPatch.Patch(harmony);
         }
 
         //[HarmonyPatch(typeof(Input), "GetKeyDown", new Type[] { typeof(KeyCode) })]
@@ -124,6 +126,32 @@ namespace BeatSaberKeyboardMapperPlugin.Harmony
                 }
 
                 return value;
+            }
+        }
+
+        // I really don't know why this patch is necessary
+        class SettingsControllerFixPatch
+        {
+            public static void Patch(HarmonyInstance harmony)
+            {
+                var svc = typeof(SettingsViewController);
+                var self = typeof(SettingsControllerFixPatch);
+                
+                var didActivate = svc.GetMethod("DidActivate", BindingFlags.NonPublic | BindingFlags.Instance);
+
+                var preDidActivate = self.GetMethod("PreDidActivate", BindingFlags.NonPublic | BindingFlags.Static);    
+
+                harmony.Patch(didActivate, new HarmonyMethod(preDidActivate), null);
+            }
+
+            private static void PreDidActivate(SettingsViewController __instance, bool firstActivation, ActivationType activationType)
+            {
+                Logger.log.SuperVerbose($"{__instance} {firstActivation} {activationType}");
+                if (!firstActivation && activationType == ActivationType.NotAddedToHierarchy)
+                {
+                    __instance.PopViewControllerImmediately();
+                    __instance.PopViewControllerImmediately();
+                }
             }
         }
     }

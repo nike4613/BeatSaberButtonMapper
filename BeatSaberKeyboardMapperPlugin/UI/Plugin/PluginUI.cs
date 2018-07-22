@@ -16,74 +16,33 @@ namespace BeatSaberKeyboardMapperPlugin.UI.Plugin
 {
     class PluginUI : MonoBehaviour
     {
-#if false
-        internal static PluginUI instance;
-
-        private MainMenuViewController _mainMenuViewController;
-        private RectTransform _mainMenuRectTransform;
-
-        private KeyboardMapperSettingsMasterViewController _settingsViewController;
-
-        public static void OnLoad()
+        public static void Init()
         {
-            if (instance != null)
-            {
-                return;
-            }
-            new GameObject("KeyboardMapper Plugin UI").AddComponent<PluginUI>();
-        }
-        
-        public void Awake()
-        {
-            instance = this;
+            BeatSaberUI.OnLoad();
+
+            var submenu = CreateSubMenu("Keyboard Mapper");
+            AddToggleSetting<EnabledSettingController>("Enabled", submenu);
+            AddListSetting<InputModeSettingController>("Input Type", submenu);
+            AddListSetting<ControllerModeSettingController>("Controller Type", submenu);
+
+            var uiButton = BeatSaberUI.CreateUIButton(submenu, "CancelButton");
+            BeatSaberUI.SetButtonText(uiButton, "Bindings");
+            uiButton.onClick.AddListener(PresentSettings);
         }
 
-        public void Start()
+        static BindingConfigViewController bindingViewController;
+        internal static void PresentSettings()
         {
             try
             {
-                _mainMenuViewController = Resources.FindObjectsOfTypeAll<MainMenuViewController>().First();
-                _mainMenuRectTransform = _mainMenuViewController.transform as RectTransform;
-
-                CreateSettingsButton();
-            }
-            catch (Exception e)
-            {
-                Logger.log.Error("EXCEPTION ON AWAKE(TRY CREATE BUTTON): " + e);
-                Logger.log.Error(e);
-            }
-        }
-
-        private void CreateSettingsButton()
-        {
-            Button _settingsButton = BeatSaberUI.CreateUIButton(_mainMenuRectTransform, "QuitButton");
-
-            try
-            {
-                (_settingsButton.transform as RectTransform).anchoredPosition = new Vector2(7f, 18f);
-                (_settingsButton.transform as RectTransform).sizeDelta = new Vector2(28f, 10f);
-
-                BeatSaberUI.SetButtonText(_settingsButton, "Key Bindings");
-
-                _settingsButton.onClick.AddListener(PresentSettings);
-            }
-            catch (Exception e)
-            {
-                Logger.log.Error("EXCEPTION: " + e.Message);
-                Logger.log.Error(e);
-            }
-
-        }
-
-        internal void PresentSettings()
-        {
-            try
-            {
-                if (_settingsViewController == null)
+                Logger.log.SuperVerbose("Presenting settings");
+                if (bindingViewController == null)
                 {
-                    _settingsViewController = BeatSaberUI.CreateViewController<KeyboardMapperSettingsMasterViewController>();
+                    Logger.log.SuperVerbose("Creating view controller");
+                    bindingViewController = BeatSaberUI.CreateViewController<BindingConfigViewController>();
                 }
-                _mainMenuViewController.PresentModalViewController(_settingsViewController, null, false);
+                Logger.log.SuperVerbose("Presenting view controller");
+                mainVC.PresentModalViewController(bindingViewController, null, false);
             }
             catch (Exception e)
             {
@@ -92,24 +51,10 @@ namespace BeatSaberKeyboardMapperPlugin.UI.Plugin
             }
         }
 
-#if DEBUG
-        internal void HideSettings()
-        {
-            _settingsViewController.DismissModalViewController(null);
-        }
-#endif
-#else
-        public static void Init()
-        {
-            var submenu = CreateSubMenu("Keyboard Mapper");
-            AddToggleSetting<EnabledSettingController>("Enabled", submenu);
-            AddListSetting<InputModeSettingController>("Input Type", submenu);
-            AddListSetting<ControllerModeSettingController>("Controller Type", submenu);
-        }
-
         public const int MainScene = 1;
 
         static MainSettingsTableCell tableCell = null;
+        static SettingsViewController mainVC = null;
 
         public static Transform CreateSubMenu(string name)
         {
@@ -125,9 +70,9 @@ namespace BeatSaberKeyboardMapperPlugin.UI.Plugin
                 // Get a refence to the Settings Table cell text in case we want to change fint size, etc
                 var text = tableCell.GetPrivateField<TextMeshProUGUI>("_settingsSubMenuText");
             }
-
-            var temp = Resources.FindObjectsOfTypeAll<SettingsViewController>().FirstOrDefault();
-            var others = temp.transform.Find("SubSettingsViewControllers").Find("Others");
+            if (mainVC == null )
+                mainVC = Resources.FindObjectsOfTypeAll<SettingsViewController>().FirstOrDefault();
+            var others = mainVC.transform.Find("SubSettingsViewControllers").Find("Others");
             var tweakSettingsObject = Instantiate(others.gameObject, others.transform.parent);
             Transform mainContainer = CleanScreen(tweakSettingsObject.transform);
 
@@ -179,6 +124,5 @@ namespace BeatSaberKeyboardMapperPlugin.UI.Plugin
             
             newSettingsObject.GetComponentInChildren<TMP_Text>().text = name;
         }
-#endif
     }
 }

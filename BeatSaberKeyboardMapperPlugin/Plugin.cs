@@ -92,33 +92,13 @@ namespace BeatSaberKeyboardMapperPlugin
         {
             if (level == 1)
             {
-                //BeatSaberUI.OnLoad(); // init the UI lib
-                //UI.Plugin.PluginUI.OnLoad(); // init our UI
-
                 PluginUI.Init();
             }
         }
-
-#if DEBUG
-        private bool inUi = false;
-#endif
+        
         public void OnUpdate()
         {
-#if DEBUG
-            /*if (Input.GetKeyDown(KeyCode.Backslash))
-            {
-                if (!inUi)
-                {
-                    UI.Plugin.PluginUI.instance.PresentSettings();
-                    inUi = true;
-                }
-                else
-                {
-                    UI.Plugin.PluginUI.instance.HideSettings();
-                    inUi = false;
-                }
-            }*/
-#endif
+
         }
     }
 }

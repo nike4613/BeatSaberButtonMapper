@@ -61,7 +61,7 @@ namespace BeatSaberKeyboardMapperPlugin.UI
 
         }
 
-        public static Button CreateUIButton(RectTransform parent, string buttonTemplate)
+        public static Button CreateUIButton(Transform parent, string buttonTemplate)
         {
             Button btn = Instantiate(Resources.FindObjectsOfTypeAll<Button>().Last(x => (x.name == buttonTemplate)), parent, false);
             DestroyImmediate(btn.GetComponent<GameEventOnUIButtonClick>());

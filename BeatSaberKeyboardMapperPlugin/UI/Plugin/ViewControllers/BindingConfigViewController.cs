@@ -9,12 +9,21 @@ using VRUI;
 namespace BeatSaberKeyboardMapperPlugin.UI.Plugin.ViewControllers
 {
     // for impl look at SettingsViewController
-    class BindingConfigViewController : VRUIViewController
+    class BindingConfigViewController : VRUINavigationController
     {
         Button _button;
+        Button backButton;
 
         protected override void DidActivate(bool firstActivation, ActivationType activationType)
         {
+            if (backButton == null)
+            {
+                backButton = BeatSaberUI.CreateBackButton(rectTransform);
+                backButton.onClick.AddListener(delegate()
+                {
+                    DismissModalViewController(null, true);
+                });
+            }
             if (_button == null)
             {
                 _button = BeatSaberUI.CreateUIButton(rectTransform, "QuitButton");
